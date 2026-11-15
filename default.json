@@ -1,0 +1,102 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "description": "smilinTux shared Renovate policy. Every SK repo extends this; change it here, by PR.",
+  "extends": [
+    "config:recommended",
+    ":dependencyDashboard",
+    "helpers:pinGitHubActionDigests",
+    "docker:pinDigests",
+    "github>smilinTux/renovate-config:caps"
+  ],
+  "timezone": "America/Chicago",
+  "schedule": [
+    "before 6am on monday"
+  ],
+  "labels": [
+    "dependencies"
+  ],
+  "prHourlyLimit": 4,
+  "prConcurrentLimit": 10,
+  "minimumReleaseAge": "3 days",
+  "platformAutomerge": false,
+  "automergeType": "pr",
+  "ignoreTests": false,
+  "fetchChangeLogs": "pr",
+  "osvVulnerabilityAlerts": true,
+  "vulnerabilityAlerts": {
+    "enabled": true,
+    "labels": [
+      "security",
+      "dependencies"
+    ],
+    "schedule": [
+      "at any time"
+    ],
+    "prCreation": "immediate",
+    "minimumReleaseAge": null,
+    "automerge": true,
+    "dependencyDashboardApproval": false,
+    "commitMessageSuffix": "[SECURITY]"
+  },
+  "lockFileMaintenance": {
+    "enabled": true,
+    "schedule": [
+      "before 6am on monday"
+    ],
+    "automerge": false
+  },
+  "packageRules": [
+    {
+      "description": "Minor updates: one weekly group per repo, reviewed by a human or the orchestrator.",
+      "matchUpdateTypes": [
+        "minor"
+      ],
+      "groupName": "minor updates",
+      "groupSlug": "weekly-minor",
+      "automerge": false
+    },
+    {
+      "description": "Patch updates (and digest/pin moves): one weekly group per repo, merged by Renovate only when every check is green.",
+      "matchUpdateTypes": [
+        "patch",
+        "digest",
+        "pin",
+        "pinDigest"
+      ],
+      "groupName": "patch updates",
+      "groupSlug": "weekly-patch",
+      "automerge": true
+    },
+    {
+      "description": "Majors: never grouped, one at a time, release notes in the PR, always reviewed.",
+      "matchUpdateTypes": [
+        "major"
+      ],
+      "groupName": null,
+      "automerge": false,
+      "prConcurrentLimit": 1,
+      "prPriority": -1
+    },
+    {
+      "description": "GitHub Actions: pinned to a commit SHA (helpers:pinGitHubActionDigests); SHA moves count as digest updates above.",
+      "matchManagers": [
+        "github-actions"
+      ],
+      "labels": [
+        "dependencies",
+        "ci"
+      ]
+    },
+    {
+      "description": "Dockerfiles and base images: pinned to a digest (docker:pinDigests).",
+      "matchManagers": [
+        "dockerfile",
+        "docker-compose"
+      ],
+      "labels": [
+        "dependencies",
+        "docker"
+      ]
+    }
+  ]
+}

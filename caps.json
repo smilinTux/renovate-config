@@ -1,0 +1,42 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "description": "Upper caps on third-party libraries: kept only with a reason and a test, re-tested monthly. See skcapstone deploy/dependency-caps.md.",
+  "packageRules": [
+    {
+      "description": "A capped Python requirement (<, <=, ~=, ==) never jumps past its cap in an ordinary update: libraries keep their ranges.",
+      "matchManagers": [
+        "pep621",
+        "setup-cfg"
+      ],
+      "matchDepTypes": [
+        "project.dependencies",
+        "project.optional-dependencies",
+        "dependencies",
+        "optional-dependencies"
+      ],
+      "rangeStrategy": "in-range-only"
+    },
+    {
+      "description": "Try lifting this cap: once a month, for every capped requirement with a release above its cap, open one PR that widens the range. Its CI is the test that the cap must still pass; green means drop the cap and its row in dependency-caps.md.",
+      "matchManagers": [
+        "pep621",
+        "setup-cfg"
+      ],
+      "matchCurrentValue": "/(<|~=|==)/",
+      "rangeStrategy": "widen",
+      "schedule": [
+        "* 0-5 1 * *"
+      ],
+      "groupName": null,
+      "labels": [
+        "dependencies",
+        "cap-lift"
+      ],
+      "automerge": false,
+      "commitMessagePrefix": "deps(cap-lift):",
+      "prBodyNotes": [
+        "This PR tries lifting an upper cap. The rule (deploy/dependency-caps.md in skcapstone): a cap stays only with a written reason and a test that proves it. If CI is green, drop the cap and remove its row; if red, keep the row and update its 'Last checked' date."
+      ]
+    }
+  ]
+}

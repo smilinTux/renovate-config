@@ -1,0 +1,17 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "description": "For skcapstone's fleet lock: Renovate's pip-compile manager reruns the uv command in the lock's header, so every bump arrives as a regenerated lock that faces the fleet-lock gate.",
+  "pip-compile": {
+    "managerFilePatterns": ["/(^|/)deploy/fleet-constraints\\.txt$/"]
+  },
+  "packageRules": [
+    {
+      "description": "The fleet lock's inputs are exact SK pins and unpinned tools, not capped library ranges: bump the pins weekly (patch merges itself after the whole gate is green), never treat them as cap-lift PRs.",
+      "matchManagers": ["pip-compile"],
+      "rangeStrategy": "pin",
+      "schedule": ["before 6am on monday"],
+      "labels": ["dependencies", "fleet-lock"],
+      "commitMessagePrefix": "deps(fleet):"
+    }
+  ]
+}
