@@ -37,6 +37,18 @@
       "prBodyNotes": [
         "This PR tries lifting an upper cap. The rule (deploy/dependency-caps.md in skcapstone): a cap stays only with a written reason and a test that proves it. If CI is green, drop the cap and remove its row; if red, keep the row and update its 'Last checked' date."
       ]
+    },
+    {
+      "description": "CI Python stays below 3.13 until ansible-core supports newer: Renovate's 3.12 -> 3.15 setup-python bump broke ansible-core in every workflow (AttributeError: module 'dataclasses' has no attribute '_is_type'; skstacks #421, skcapstone #1393). Raise together with ansible-core.",
+      "matchFileNames": [
+        ".github/workflows/**",
+        ".forgejo/workflows/**",
+        ".gitea/workflows/**"
+      ],
+      "matchDepNames": [
+        "python"
+      ],
+      "allowedVersions": "<3.13"
     }
   ]
 }
